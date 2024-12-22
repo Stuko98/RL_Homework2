@@ -115,8 +115,8 @@ Eigen::VectorXd KDLController::idCntr(KDL::Frame &_desPos,                      
     // control law
     Eigen::Matrix<double,7,1> y;
 
-    //y << JApinv*(dot_dot_x_d - JAdot*robot_->getJntVelocities() + Kd*dot_x_tilde + Kp*x_tilde);
-      y << Jpinv * (dot_dot_x_d - Jdot*robot_->getJntVelocities() + Kd*dot_x_tilde + Kp*x_tilde);
+    //y << JApinv*(dot_dot_x_d - JAdot*robot_->getJntVelocities() + Kd*dot_x_tilde + Kp*x_tilde);                      //credo di aver capito perché non va: dot_x_tilde non contiene come componente angolare w (omega), ma phi_dot, che è la derivata del vettore degli angoli di Eulero. Quindi non avrei dovuto mettere "dot_x_tilde", ma "T_matrix(euler)*dot_x_tilde".
+      y << Jpinv * (dot_dot_x_d - Jdot*robot_->getJntVelocities() + Kd*dot_x_tilde + Kp*x_tilde);                      //visto che ho usato erroneamente lo Jacobiano geometrico, "dot_x_tilde" giustamente funziona. 
 
     return M * y 
             + robot_->getGravity() + robot_->getCoriolis();
